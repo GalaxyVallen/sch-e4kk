@@ -22,14 +22,16 @@ Route::get('/', [OverviewController::class, 'index']);
 Route::get('/movie/{id}', [MovieController::class, 'index']);
 
 
-Route::middleware('guest')->group(function () {
+Route::middleware('guest')->prefix('auth')->group(function () {
   Route::view('/join', 'auth.signup', ['title' => 'Sign Up'])->name('register');
   Route::view('/login', 'auth.signin', ['title' => 'Sign In'])->name('login');
+  
+  Route::post('/login', [AuthController::class, 'login']);
+  Route::post('/join', [AuthController::class, 'register']);
 });
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/join', [AuthController::class, 'register']);
-
 Route::middleware('auth')->group(function () {
-  Route::get('/me',[UserController::class,'me'])->name('me');
+  Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+  Route::get('/{username}', [UserController::class, 'show'])->name('user');
 });

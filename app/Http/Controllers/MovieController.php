@@ -21,22 +21,21 @@ class MovieController extends Controller
      */
     public function index($id)
     {
-        $movie = Cache::get("movie-$id");
-        if ($movie === null) {
-            $movie = $this->tmdb->api('movie')->path($id)->appendToResponse(['videos', 'credits'])->getResponse();
-            if (isset($movie->runtime)) {
-                $movie->runtime = $this->formatRuntime($movie->runtime);
-            }
-            Cache::put("movie-$id", $movie, now()->addHour());
+        $cache = Cache::get("movie-$id");
+
+        $movie = $this->tmdb->api('movie')->path($id)->appendToResponse(['videos', 'credits'])->getResponse();
+        if (isset($movie->runtime)) {
+            $movie->runtime = $this->formatRuntime($movie->runtime);
         }
-        if (!empty($movie)) {
-            if (!$movie->isFound && $movie->getData()['code'] == '404') {
-                $view = $movie->getName();
-                $movie = $movie->getData();
-            } else {
-                $view = 'movie';
-            }
-            return view($view, compact('movie'));
+        $key = "movie-$id";
+
+        if (!$movie->isFound && $movie->getData()['code'] == '404') {
+            $view = $movie->getName();
+            $movie = $movie->getData();
+        } else {
+            $view = 'movie';
+            Cache::put($key, $movie, now()->addHour());
         }
+        return view($view, compact('movie'));
     }
 }

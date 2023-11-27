@@ -11,6 +11,9 @@
     </div>
 
     <div class="mt-10 sm:mx-auto font-headin sm:w-full sm:max-w-sm">
+
+      <x-partial.flash :flash="session()->all()"></x-partial.flash>
+
       <form class="space-y-6" action="#" method="POST">
         @csrf
         <x-auth.label name="usermail" type="text"></x-auth.label>

@@ -16,7 +16,7 @@
     <x-navigations.subnav></x-navigations.subnav>
 
     <header style="background-image: url('{{ config('constants.originalB') .  $movie->backdrop_path  }}')"
-        class="overlay-img container relative isolate bg-cover bg-none-bf md:bg-right-center-bf bg-no-repeat px-[5vw] py-12 bg-[#121212] min-[2368px]:px-[1.5vw]">
+        class="overlay-img container relative isolate bg-cover bg-none-bf md:bg-right-center-bf bg-no-repeat -z-10 px-[5vw] py-12 bg-[#121212] min-[2368px]:px-[1.5vw]">
         <div class="txt flex flex-col z-30 min-w-full sm:min-w-[500px]">
             <div class="aspc w-52 relative shadow-3xl">
                 <div class="block h-full group">

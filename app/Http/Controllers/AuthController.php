@@ -3,29 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $errors = [
-            'usermail.required' => 'Username atau Email harus diisi',
-            'password.required' => 'Password harus diisi',
-        ];
-        $validated = $request->validate([
-            'usermail' => 'required',
-            'password' => 'required'
-        ], $errors);
+        $validated = $request->validated();
+
+        $validated = $request->safe()->only(['usermail', 'password']);
 
         $user = User::where('email', $validated['usermail'])->orWhere('username', $validated['usermail'])->first();
 
         if (!$user) {
-            session()->flash('gagal', 'Sign in gagal!');
+            session()->flash('fail', 'Incorrect username or password.');
             return redirect()->back();
         }
 
@@ -33,13 +28,13 @@ class AuthController extends Controller
             'email' => $user->email,
             'password' => $validated['password']
         ];
-        
+
         if (Auth::attempt($crendetials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->intended();
         } else {
-            session()->flash('gagal', 'Sign in gagal! Ntah username g d / email yg slh');
-            return redirect()->back()->withInput();
+            session()->flash('fail', 'Incorrect username or password.');
+            return redirect()->back();
         }
     }
 
@@ -51,11 +46,21 @@ class AuthController extends Controller
 
         $validated['password'] = Hash::make($validated['password']);
 
-        dd($validated);
-
         User::create($validated);
 
-        session()->flash('success', 'Berhasil sign up! Silahkan sign in');
-        return redirect('/signin');
+        $greets = 'Welcom to ' . config('app.name') . ', ' . $validated['name'] . '!';
+
+        session()->flash('success', $greets);
+        return to_route('login');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return to_route('login');
     }
 }

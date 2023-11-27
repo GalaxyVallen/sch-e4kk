@@ -14,18 +14,19 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama harus diisi!',
-            'name.string' => 'Nama tidak boleh angka atau simbol!',
-            'name.min' => 'Nama harus memiliki minimal 5 karekter!',
-            'username.required' => 'Username harus diisi!',
-            'username.min' => 'Username harus memiliki minimal 5 karakter!',
-            'username.unique' => 'Username sudah digunakan!',
-            'email.required' => 'Email harus diisi!',
-            'email.email' => 'Format email tidak sesuai!',
-            'email.unique' => 'Email sudah digunakan!',
-            'password.required' => 'Password harus diisi!',
-            'password.min' => 'Password harus memiliki minimal 6 karakter!',
-            'password.confirmed' => 'Ulangi password tidak sesuai!'
+            'name.required' => 'Oopsie! Don\'t forget to fill in your name!',
+            'name.string' => 'Hmm... your name can\'t have numbers or symbols!',
+            'name.min' => 'Oh no! Your name must be at least 5 characters long!',
+            'name.regex' => 'Wait, does your name even have letters in it?',
+            'username.required' => 'Hey there! You need to fill in your username!',
+            'username.min' => 'Oops! Your username should be at least 5 characters long!',
+            'username.unique' => 'Oh snap! This username is already taken!',
+            'email.required' => 'Hold on! You gotta fill in your email!',
+            'email.email' => 'Hmm... the email format seems a bit off!',
+            'email.unique' => 'Oops! This email is already in use!',
+            'password.required' => 'Uh-oh! Don\'t forget to fill in your password!',
+            'password.min' => 'Oopsie daisy! Your password should be at least 6 characters long!',
+            'password.confirmed' => 'Whoopsie! The password confirmation doesn\'t match!',
         ];
     }
 
@@ -37,9 +38,9 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:5',
-            'username' => 'required|min:5',
-            'email' => 'required|email',
+            'name' => 'required|regex:/^[a-zA-Z\s]+$/|min:5',
+            'username' => 'required|min:5|unique:users',
+            'email' => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed'
         ];
     }

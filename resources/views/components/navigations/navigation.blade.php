@@ -15,27 +15,45 @@
     </a>
     <div class="ml-auto flex items-center md:order-2">
       @auth
+      <div>
+        <span data-popover-target="user"
+          class="hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white block cursor-pointer rounded py-2 pl-3 pr-4 text-black duration-150 focus-within:outline-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 md:px-3 md:py-2">{{
+          Auth::user()->username }}</span>
+      </div>
+
+      <div data-popover id="user" role="tooltip"
+        class="absolute z-50 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-150 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+        <div class="px-3 py-2">
+          <p class="font-semibold font-main">{{ Auth::user()->name }}</p>
+          <p>{{ Auth::user()->email }}</p>
+        </div>
+        <div class="border-t border-r-slate-400 p-2">
+          <a href="{{ route('user',Auth::user()->username) }}"
+            class="hover:bg-gray-200/60 p-2 duration-150 inline-flex items-center w-full gap-x-2 rounded-sm text-black">
+            <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+              fill="none" viewBox="0 0 14 18">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M7 8a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-2 3h4a4 4 0 0 1 4 4v2H1v-2a4 4 0 0 1 4-4Z" />
+            </svg>
+            Your Profile</a>
+        </div>
+        <div class="p-2">
+          <a href="{{ route('logout') }}"
+            class="hover:bg-gray-200/60 p-2 duration-150 block full gap-x-2 rounded-sm text-black">
+            Logout</a>
+        </div>
+      </div>
+
       @else
       <span class="hidden md:flex">
         <div>
-          {{-- <a href="/login"
-            class="block rounded py-2 pr-4 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white">Login</a>
-          --}}
-          <svg class="h-3 w-3 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-            fill="none" viewBox="0 0 14 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M7 8a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-2 3h4a4 4 0 0 1 4 4v2H1v-2a4 4 0 0 1 4-4Z" />
-          </svg>
+          <a href="{{ route('login') }}"
+            class="hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white block rounded py-2 pl-3 pr-4 text-black duration-150 focus-within:outline-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 md:px-3 md:py-2">Login</a>
         </div>
 
-        <div class="sm:ml-5">
-          {{-- <a href="/register"
-            class="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white">Register</a>
-          --}}
-          <svg class="h-3 w-3 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-            fill="none" viewBox="0 0 20 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M13 8h6m-3 3V5m-6-.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0ZM5 11h3a4 4 0 0 1 4 4v2H1v-2a4 4 0 0 1 4-4Z" />
+        <div>
+          <a href="{{ route('register') }}"
+            class="hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white block rounded py-2 pl-3 pr-4 text-black duration-150 focus-within:outline-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 md:px-3 md:py-2">Register</a>
           </svg>
         </div>
       </span>
@@ -72,12 +90,6 @@
                 d="m1 1 4 4 4-4" />
             </svg></button>
         </li> --}}
-        @auth
-        <li>
-          <a href="{{ route('me') }}"
-            class="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white">{{ Auth::user()->username }}</a>
-        </li>
-        @endauth
         @guest
         <li class="md:hidden">
           <a href="/login"
